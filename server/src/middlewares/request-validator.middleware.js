@@ -1,34 +1,28 @@
 const bodyValidator = (schema) => {
-   
+
     return async (req, res, next) => {
-        try{
-        const data = req.body
-        await schema.validateAsync(data,{abortEarly:false});
-        next()
-        }catch(exception){
-            let messageBag= {}
-            if(exception.details){
-               
-                exception.details.map((val)=>{
-                   const key = val.context.label
-                   let msg=val.message
-                   messageBag[key]=msg
+        try {
+            const data = req.body
+            await schema.validateAsync(data, { abortEarly: false });
+            next()
+        } catch (exception) {
+            let messageBag = {}
+            if (exception.details) {
+
+                exception.details.map((val) => {
+                    const key = val.context.label
+                    let msg = val.message
+                    messageBag[key] = msg
                 });
             }
             next({
-                detail:messageBag,
-                code:400,
-                message:"Validation Failed",
-                status:"VALIDATION_FAILED",
-                options:null
+                detail: messageBag,
+                code: 400,
+                message: "Validation Failed",
+                status: "VALIDATION_FAILED",
+                options: null
             })
-            // res.status(400).json({
-            //     error:messageBag,
-            //     message:"Validation Failded",
-            //     status:"VALIDATION_FAILED",
-            //     options:null
-                
-            // })
+         
         }
 
     }

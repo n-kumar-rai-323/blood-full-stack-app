@@ -39,16 +39,9 @@ const UserRegisterDTO = Joi.object({
     .messages({
       "string.pattern.base": "Phone number must be 10 digits"
     }),
-
   bloodGroup: Joi.string().valid(...Object.values(BloodGroup)).required(),
-
-  address: Joi.string()
-    .min(3)
-    .max(100)
-    .required(),
-  role: Joi.string()
-  .valid(...Object.values(UserRole))
-  .default(UserRole.DONOR)
+  address: Joi.string().min(3).max(100).required(),
+  role: Joi.string().valid(...Object.values(UserRole)).default(UserRole.DONOR)
 
 })
 module.exports={UserRegisterDTO}

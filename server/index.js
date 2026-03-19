@@ -7,8 +7,6 @@ const app = require("./src/config/express.config")
 const PORT = 8008
 const server= http.createServer(app)
 
-server.listen(PORT, 'localhost', (err)=>{
-    if(!err){
-        console.log(`Application Running ${PORT}`)
-    }
+server.listen(PORT, "localhost", () => {
+  console.log(`Server running at http://localhost:${PORT}`)
 })

@@ -1,9 +1,9 @@
 const express = require("express")
 const routerConfig = require("./router.config")
 const app = express()
-
+const fs = require("fs")
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }))
 
 
 app.use("/api", routerConfig)
@@ -15,19 +15,21 @@ app.use((req, res, next) => {
         message: "Resource not found",
         status: "NOT_FOUND"
     })
-    // res.status(404).json({
-    //     erro:null,
-    //     message:"Resource not found",
-    //     status:"NOT_FOUND",
-    //     options:null
-    // })
+  
 })
+
 // Custom error-handling middleware
 app.use((err, req, res, next) => {
     let code = err.code || 500
     let errorDetail = err.detail || null
     let msg = err.message || "Oops! Something went wrong."
     let status = err.status || "SERVER_ERROR"
+
+    // Safe file cleanup
+    if (req.file && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+    }
+
     res.status(code).json({
         error: errorDetail,
         message: msg,
@@ -35,5 +37,4 @@ app.use((err, req, res, next) => {
         options: null
     });
 });
-
 module.exports = app
